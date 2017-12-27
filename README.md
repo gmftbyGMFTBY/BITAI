@@ -30,17 +30,20 @@
   >
   >Env :
   >
-  >   	1. Python 3.x (Anaconda3 4.3.14)
-  >     2. IPython 6.0
-  >      3. Tensorflow 1.14
-  >      4. Scikit-learn 0.18.1
-  >      5. Other **scienctific computing **module for python
+  >* Python 3.x (Anaconda3 4.3.14)
+  >* IPython 6.0
+  >* Tensorflow 1.14
+  >* Scikit-learn 0.18.1
+  >* Other **scienctific computing **module for python
   >
   >Editor : 
   >
-  >​	Vim 7.4
+  >* Vim 7.4
 
----
+* 参考
+
+  >1. Tensorflow 1.2官方文档
+  >2. sklearn 0.18官方文档
 
 ### 1. Application for Machine Learning
 
@@ -48,9 +51,28 @@
 
 #### 1.1 Supervise Learning
 
+* 目标
+
+  垃圾邮件分类器
+
 ---
 
 #### 1.2 Unsupervise Learning
+
+* 目标
+
+  文本聚类
+
+* 流程
+
+  ![文本聚类](/home/lantian/File/AI/photo/文本聚类.png)
+
+* 具体开发环境
+
+  1. `jieba`
+  2. `NLTK`
+  3. `sklearn`
+  4. `matplotlib`
 
 ---
 
