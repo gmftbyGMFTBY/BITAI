@@ -50,10 +50,23 @@ def read_stopwords():
     '''
         读取中文停用词后返回停用词列表
     '''
+    import os
+    os.system('pwd')
     with open('../data/train/stopwords', 'r') as f:
         content = f.read()
     return content.split()
 
+def cut_without_stopwords(text, stopwords):
+    '''
+        返回没有停用词的切词列表，一次输入一个文本的内容
+    '''
+    ans = set(jieba.lcut(text, HMM = True))
+    stopwords = set(stopwords)
+    # 集合操作去除停用词
+    return list(ans - (ans & stopwords))
+
 if __name__ == "__main__":
-    # ans = read_kind('C19-Computer', 10)
-    # print(len(ans))
+    ans = read_kind('C19-Computer', 5)
+    stopwords = read_stopwords()
+    for i in ans:
+        print(cut_without_stopwords(i, stopwords))
