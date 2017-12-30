@@ -26,13 +26,14 @@ import visualization as tv
 import VSM as tV
 import PCA as tP
 import TFIDF as tT
+import time
 
 def test():
     kind_list = ['C3-Art', 'C19-Computer', 'C7-History', 'C32-Agriculture', 'C31-Enviornment']
     stopwords = tl.read_stopwords()
     doc = []
     for i in kind_list:
-        ans = tl.read_kind(i, 200)
+        ans = tl.read_kind(i, 50)
         for j in ans:
             doc.append(tl.cut_without_stopwords(j, stopwords))
     print('分词完成')
@@ -59,16 +60,18 @@ def test():
     return cluster, kind_list
 
 if __name__ == "__main__":
+    begin = time.time()
     ans, kind = test()
+    end = time.time()
     # 计算平均正确率
     length = len(kind)
     from collections import Counter
     sump = 0
     for i in range(length):
-        pause = ans[i * 100 : i * 100 + 99]
-        print(pause)
+        pause = ans[i * 50 : i * 50 + 49]
         w = Counter(pause)
-        top = w.most_common(1)[0][1]
+        top = w.most_common(1)[0][1] / 50
         sump += top
-    print(ans)
-    print('平均正确率:', sump / length)
+    print('平均正确率 :', sump / length)
+    print('运算时间(s):', end - begin)
+

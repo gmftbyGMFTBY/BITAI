@@ -10,5 +10,5 @@ from sklearn.decomposition import PCA
 
 def create_PCA(TF_IDF, weight):
     pca = PCA(n_components = weight)
-    X = pca.fit_transform(TF_IDF)
+    X = pca.fit(TF_IDF)
     return X
