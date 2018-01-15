@@ -34,6 +34,9 @@ def find_exchenger(X, Y):
 
     # debug for YY
     # print('check for the same YY and X', YY, X)
+    # Inorder to make the program right, the return must have the value, so I add the [0, 0] to the result
+    if exchanger == [] : 
+        exchanger.append([0, 0])
     return exchanger
 
 def exchange(X, Y):
@@ -59,7 +62,7 @@ class agent:
         # random exchange operator for the agent (PSO)
         self.exchange = []
         for i in range(start_exchange_length):
-            self.exchange.append(np.random.choice(range(dimension), 2))
+            self.exchange.append(list(np.random.choice(range(dimension), 2)))
         self.exchange = np.array(self.exchange)
 
         # pbset
@@ -69,7 +72,7 @@ class agent:
         # current solution
         self.current = self.pbest
 
-        print('Init for the agent %d is over !' % self.id)
+        # print('Init for the agent %d is over !' % self.id)
         # may want to print something to debug
         # pass
 
@@ -79,11 +82,11 @@ class agent:
         # change the vel
         if len(self.exchange) > self.start_exchange_length : 
             # save the order but not all the elements will be contained
-            # and try to decress the length of the vel , it is funny ? 
+            # and try to decress the length of the vel , is it funny ? 
             pause = len(self.exchange)
-            mask = random.sample(range(pause), self.start_exchange_length).sort()
+            mask = sorted(random.sample(range(pause), self.start_exchange_length))
             self.exchange = self.exchange[mask]
-        print('agent %d has chenged the solution !' % self.id)
+        # print('agent %d has chenged the solution !' % self.id)
 
     def calculate(self, cities_map):
         # calculate the result for this agent's solution and return 
@@ -128,22 +131,30 @@ class swarm:
     def change_agent(self, agent):
         # change all the agent in the swarm once
         # find the exchanger from pbest and gbest
+        # may be the [[0, 0]]
         pbest_influence = find_exchenger(agent.pbest_origin, agent.solution)
+        # may be very larger !!
         gbest_influence = find_exchenger(self.agents[self.gbest_id].pbest_origin , agent.solution)
 
         # print(pbest_influence, len(pbest_influence))
         # print(gebst_influence, len(gbest_influence))
         alpha = np.random.random()
         beta  = 1 - alpha
-
-        length_pbest_influence = int(len(pbest_influence) * alpha)
-        length_gbest_influence = int(len(gbest_influence) * beta)
-
-        agent.exchenge = np.append(agent.exchange, random.sample(pbest_influence, length_pbest_influence))
-        agent.exchange = np.append(agent.exchange, random.sample(gbest_influence, length_gbest_influence))
+        
+        # Ignore the [] for the length_pbest_influence
+        length_pbest_influence = max(int(len(pbest_influence) * alpha), 1)
+        length_gbest_influence = max(int(len(gbest_influence) * beta),  1)
+    
+        try:
+            agent.exchange = np.concatenate((agent.exchange, random.sample(pbest_influence, length_pbest_influence)), axis = 0)
+            agent.exchange = np.concatenate((agent.exchange, random.sample(gbest_influence, length_gbest_influence)), axis = 0)
+        except:
+            # show the debug message 
+            print(agent.exchange.shape)
+            exit(1)
 
         agent.move()
-        print('Move for agent %d is over !' % agent.id)
+        # print('Move for agent %d is over !' % agent.id)
         return
 
     def change_swarm(self, i, cities_map):
@@ -152,7 +163,7 @@ class swarm:
             self.change_agent(self.agents[index])    # change the agent
             self.agents[index].find_pbest(cities_map)          # agent renew the pbest
         self.find_gbest()                            # swam renew the gbest
-        print('The change in the loop %d is over !' % i ,end = '\r')
+        # print('The change in the loop %d is over !' % i ,end = '\r')
         return
 
 
@@ -187,16 +198,21 @@ def create_map(filename):
     return cities_map, dimension
 
 if __name__ == "__main__":
-    cities_map, dimension = create_map('./DATA/vm1748.tsp')
+    import time
+    
+    cities_map, dimension = create_map('./DATA/berlin52.tsp')
     times = int(input('The number of the iterations : '))
     dimensions = int(input('The size of the swarm : '))
     length = int(input('The size of the vel\'s length : '))
 
     # create the swarm
+    begin = time.time()
     swarm = swarm(dimensions, dimension, length, cities_map)
     for i in range(times):
         swarm.change_swarm(i, cities_map)
+        print('Calculating ... %f' % (i / times, ), end='\r')
+    end = time.time()
     print('The iteration is over ! And we get the gbest solution !')
     print('The best solution is from %d agent' % swarm.gbest_id)
     print('Before iteration : %f, after iteration : %f' % (global_max, swarm.gbest))
-    
+    print('Time cost %f' % round(end - begin, 2))
