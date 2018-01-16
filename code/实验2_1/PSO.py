@@ -251,7 +251,7 @@ if __name__ == "__main__":
     min_ab     = -1
     min_result = np.inf
     for ab in np.arange(0.3, 0.7, 0.01):
-        result = run('./DATA/berlin52.tsp', 1000, 200, 10, ab)
+        result = run('../DATA/berlin52.tsp', 1000, 200, 10, ab)
         print('ab %f, result %f' % (ab, result))
         if min_result > result : 
             min_result = result
