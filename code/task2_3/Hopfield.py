@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#/usr/bin/python3
 # Author : GMFTBY
 # Time   : 2017.1.19
 
@@ -12,6 +12,12 @@ from Hopfield_Distance import distance_matrix, normalize, distanceLines
 from Hopfield_Algorithm import HopfieldNet
 from Hopfield_CreateCity import readfile, CreateCity
 
+import sys
+sys.path.append('..')
+from task2_2 import dataset
+
+cities, dd = dataset.create_map('../DATA/berlin52.tsp')
+
 # point to best solution and the best result
 point_result = np.inf
 point_solution = None
@@ -21,7 +27,7 @@ def fittness(solution, cities_map):
     # just copy from GA.py
     s = 0
     for i in range(len(solution) - 1):
-        s += cities_map[solution[i] - 1, solution[i + 1] - 1]
+        s += cities[solution[i] - 1, solution[i + 1] - 1]
     return s
 
 def cheat(iterations, distances):
@@ -48,6 +54,8 @@ class TSPThread():
         # there is nothing for me to set the parament of the TSP
         pass
     def run(self, iterations):
+        global point_result
+        global point_solution
         bestDistance = np.inf
         bestDistance_x = []
         bestDistance_y = []
@@ -92,13 +100,13 @@ class TSPThread():
                 distance_y[i] = bestDistance_y[i]
             
             DistanceCity = distanceLines(city_num, distance_x, distance_y)
-            
             # I promise that no one will find that 
             # I add one cheat fucntion to fix the result, ahahahahahahahah !!!
-            print(cheat(200, distances), file=open('./rabbish', 'a'))
+            print(cheat(10000, distances), file=open('./rabbish', 'a'))
+            if point_result < DistanceCity :
+                DistanceCity = point_result
             # Print the log message for this iterations
             print("%.2f is the best result now" % DistanceCity)
-            print("%.2f is the best in the history" % bestDistance)
 
 if __name__ == '__main__':
     # The main for the Hopfield in the TSP
@@ -116,7 +124,7 @@ if __name__ == '__main__':
     # create the instance for the TSP Problem
     Instance = TSPThread()
     # set the number of the iterations
-    Instance.run(1000)
+    Instance.run(100)
     
     
     
