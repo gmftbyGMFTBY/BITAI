@@ -213,17 +213,18 @@ def main(size, dimension, cities_map, loop_time, parent_size, children_size, alp
     swarm = init_swarm(size, dimension, cities_map, max_living)
     for i in range(loop_time):
         father = select_parent(swarm, parent_size, i)
-        print('%d is selecting parent ... ' % i)
+        # print('%d is selecting parent ... ' % i)
         swarm  = select_children(father, children_size, swarm, size, alpha, beta, cities_map, max_living, mutation_number)
-        print('%d is selecting children ... ' % i)
+        # print('%d is selecting children ... ' % i)
 
         swarm  = sorted(swarm, key = attrgetter('fittness'))    # some agents must die
         point_solution = swarm[0].solution    # point save the best agent in the history
         point_fittness = swarm[0].fittness
-        print("%d is finding the best agent ... %f" % (i, point_fittness))
+        # print("%d is finding the best agent ... %f" % (i, point_fittness))
+        yield i, point_fittness, point_solution
 
 if __name__ == "__main__":
-    cities_map, dimension = dataset.create_map('../DATA/berlin52.tsp')
+    cities_map, dimension, city = dataset.create_map('../DATA/cha34.tsp')
     # ---- test for fittness ---- #
     # print(fittness(agent(dimension, cities_map, 5), cities_map))
     # ---- test for check ---- #
@@ -239,5 +240,8 @@ if __name__ == "__main__":
     # father = select_parent(swarm, 200)
     # ---- test for select_children ---- #
     # print(len(select_children(father, 200, swarm, 300, 0.9, 0.1, cities_map, 5)))
-    main(100, dimension, cities_map, 1000, 20, 100, 0.9, 1, 5, 10)
-    print(point_fittness)
+    
+    # 145.8 for cha34 question 
+    t = main(100, dimension, cities_map, 1000, 20, 100, 0.9, 1, 5, 10)
+    for i, j ,k in t:
+        print(i, j, k)

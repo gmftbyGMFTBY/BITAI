@@ -179,7 +179,7 @@ class swarm:
             self.agents[index].find_pbest(cities_map)          # agent renew the pbest
         self.find_gbest()                            # swam renew the gbest
         # print('The change in the loop %d is over !' % i ,end = '\r')
-        return
+        return self.gbest, self.agents[self.gbest_id].pbest_origin
 
 
 def ECU_2D(x1, y1, x2, y2):
@@ -212,12 +212,10 @@ def create_map(filename):
     # return the distance ndarray
     return cities_map, dimension
 
-def run(filename, times, dimensions, length, ab):
+def run(cities_map, dimension, times, dimensions, length, ab):
     # run one test file in tsplib ('./DATA/berlin52.tsp' / ...)
-    import time
     
     # Get the paraments 
-    cities_map, dimension = create_map(filename)
     # times = int(input('The number of the iterations : '))
     # dimensions = int(input('The size of the swarm : '))
     # the length influence the result, because the length is toolarge may cause
@@ -227,21 +225,20 @@ def run(filename, times, dimensions, length, ab):
     # ab     = float(input('The alpha & beta param for balancing : '))
 
     # create the swarm, 1000, 200, 10
-    begin = time.time()
     global swarm
     global global_result
     swarm_instance = swarm(dimensions, dimension, length, cities_map, ab)
     for i in range(times):
-        swarm_instance.change_swarm(i, cities_map)
-        print('Calculating ... %f' % (i / times, ), end='\r')
-    end = time.time()
-    print('The iteration is over ! And we get the gbest solution !')
-    print('The best solution is from %d agent' % swarm_instance.gbest_id)
-    print('Before iteration : %f, after iteration : %f' % (global_max, swarm_instance.gbest))
-    print('Time cost %f' % round(end - begin, 2))
+        j, k = swarm_instance.change_swarm(i, cities_map)
+        yield i, j, k
+        # print('Calculating ... %f' % (i / times, ), end='\r')
+    # print('The iteration is over ! And we get the gbest solution !')
+    # print('The best solution is from %d agent' % swarm_instance.gbest_id)
+    # print('Before iteration : %f, after iteration : %f' % (global_max, swarm_instance.gbest))
+    # print('Time cost %f' % round(end - begin, 2))
     
     # Reninit the global_max
-    return swarm_instance.gbest
+    # return swarm_instance.gbest
 
 if __name__ == "__main__":
     # Do not waste the time for fix the paraments of the iterations and size of swarm
@@ -250,14 +247,10 @@ if __name__ == "__main__":
     
     min_ab     = -1
     min_result = np.inf
-    for ab in np.arange(0.3, 0.7, 0.01):
-        result = run('../DATA/berlin52.tsp', 1000, 200, 10, ab)
-        print('ab %f, result %f' % (ab, result))
-        if min_result > result : 
-            min_result = result
-            min_ab     = ab
-    print(min_result, min_ab)
-    
+    cities_map, dimension = create_map('../DATA/berlin52.tsp')
+    result = run(cities_map, dimension, 1000, 200, 10, ab)
+    for i in result:
+        print(i)
     
     # 1000, 200, 10, 0.42, 10 times solve the avg
     '''

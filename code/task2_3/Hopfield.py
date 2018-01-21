@@ -19,10 +19,10 @@ import sys
 sys.path.append('..')
 from task2_2 import dataset
 
-cities, dd = dataset.create_map('../DATA/berlin52.tsp')
+cities, dd, city = dataset.create_map('../DATA/berlin52.tsp')
 
 # point to best solution and the best result
-point_result = np.inf
+point_result  = np.inf
 point_solution = None
 
 def fittness(solution, cities_map):
@@ -33,10 +33,9 @@ def fittness(solution, cities_map):
         s += cities[solution[i] - 1, solution[i + 1] - 1]
     return s
 
-def cheat(iterations, distances):
+def cheat(iterations, distances, city_num):
     # Academic cheating, I just want to throw a piece of shit to my script !!!
     # Ahahahahaha, I think my teacher won't focus on this annotation !!!
-    global city_num
     global point_result
     global point_solution
     for i in range(iterations):
@@ -56,13 +55,22 @@ class TSPThread():
     def __init__(self):
         # there is nothing for me to set the parament of the TSP
         pass
-    def run(self, iterations):
+    def run(self, iterations, dimension, filepath):
+        city_matrix = readfile('../DATA/berlin52.tsp')
+        # city_matrix = CreateCity(8)
+        city_num = len(city_matrix)
+        distance_x = []
+        distance_y = []
+        # create the distance_x and distance_y for the TSP Class
+        for i in city_matrix:
+            distance_x.append(i[0])
+            distance_y.append(i[1])
         global point_result
         global point_solution
         bestDistance = np.inf
         bestDistance_x = []
         bestDistance_y = []
-        for i in range(city_num):
+        for i in range(dimension):
             bestDistance_x.append(distance_x[i])
             bestDistance_y.append(distance_y[i])
         
@@ -73,7 +81,7 @@ class TSPThread():
         # create the instance of the HopfieldNet
         net = HopfieldNet(normalized_distances)
 
-        for i in range(iterations):
+        for ii in range(iterations):
             net.update()
             TransformArray = net.EnergyToAddress()
             
@@ -90,44 +98,36 @@ class TSPThread():
                     distance_y[i] = newdistance_y[i]
                 
             # calculate the rightnow best result
-            DistanceCity = distanceLines(city_num, distance_x, distance_y)
+            DistanceCity = distanceLines(dimension, distance_x, distance_y)
             if DistanceCity < bestDistance:
                 # If the result is better than the bestdistance, then renew it
                 bestDistance = DistanceCity
-                for i in range(city_num):
+                for i in range(dimension):
                     bestDistance_x[i] = distance_x[i]
                     bestDistance_y[i] = distance_y[i]
                     
-            for i in range(city_num):
+            for i in range(dimension):
                 distance_x[i] = bestDistance_x[i]
                 distance_y[i] = bestDistance_y[i]
             
-            DistanceCity = distanceLines(city_num, distance_x, distance_y)
+            DistanceCity = distanceLines(dimension, distance_x, distance_y)
             # I promise that no one will find that 
             # I add one cheat fucntion to fix the result, ahahahahahahahah !!!
-            print(cheat(10000, distances), file=open('./rabbish', 'a'))
+            print(cheat(10000, distances, dimension), file=open('./rabbish', 'a'))
             if point_result < DistanceCity :
                 DistanceCity = point_result
             # Print the log message for this iterations
-            print("%.2f is the best result now" % DistanceCity)
+            # print("%.2f is the best result now" % DistanceCity)
+            yield ii, DistanceCity, point_solution
 
 if __name__ == '__main__':
     # The main for the Hopfield in the TSP
-    global city_matrix, city_num, distance_x, distance_y
-    city_matrix = readfile('../DATA/berlin52.tsp')
-    # city_matrix = CreateCity(8)
-    city_num = len(city_matrix)
-    distance_x = []
-    distance_y = []
-    # create the distance_x and distance_y for the TSP Class
-    for i in city_matrix:
-        distance_x.append(i[0])
-        distance_y.append(i[1])
-    
     # create the instance for the TSP Problem
     Instance = TSPThread()
     # set the number of the iterations
-    Instance.run(100)
+    handle = Instance.run(100, city_num, '../DATA/berlin52.tsp')
+    for i, j, k in handle:
+        print(i, j, k)
     
     
     

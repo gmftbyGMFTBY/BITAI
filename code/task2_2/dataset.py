@@ -37,7 +37,7 @@ def create_map(filename):
                         cities[j][1] ,cities[j][2])
     print('The distance map has been created !')
     # return the distance ndarray
-    return cities_map, dimension
+    return cities_map, dimension, cities
 
 if __name__ == "__main__":
     pass
