@@ -7,10 +7,13 @@
 
 import numpy as np
 
+import sys
+sys.path.append('..')
+
 # model just from mine
-from Hopfield_Distance import distance_matrix, normalize, distanceLines
-from Hopfield_Algorithm import HopfieldNet
-from Hopfield_CreateCity import readfile, CreateCity
+from task2_3.Hopfield_Distance import distance_matrix, normalize, distanceLines
+from task2_3.Hopfield_Algorithm import HopfieldNet
+from task2_3.Hopfield_CreateCity import readfile, CreateCity
 
 import sys
 sys.path.append('..')

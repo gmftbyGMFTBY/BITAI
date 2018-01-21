@@ -41,7 +41,11 @@ Personal Log:
 import numpy as np
 import random
 import time
-import dataset
+
+import sys
+sys.path.append('..')
+
+from task2_2 import dataset
 from operator import attrgetter, itemgetter
 
 # The point to the best agent in the history

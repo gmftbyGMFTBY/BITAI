@@ -1,9 +1,21 @@
 #!/usr/bin/python3
+# Author : GMFTBY
+# Time   : 2017.1.21
 
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog
 
-class Myframe:
+# add the path
+import sys
+sys.path.append('..')
+
+# import the solver
+from task2_2 import GA
+from task2_1 import PSO
+from task2_3 import Hopfield
+
+class TSP:
     '''
     The class of defining the frame of the window
     '''
@@ -36,17 +48,18 @@ class Myframe:
         self.frm_l = tk.Frame(self.window)
         self.frm_l.place(x = 0, y = 0)
 
-        # Init the function interface for user
+        # Init the tk Var
         self.current_algorithm_msg = tk.StringVar()    # current algorithm, default GA
         self.current_algorithm_msg.set('GA')
         self.iterations_msg        = tk.IntVar()
         self.iterations_msg.set(0)    # if the value is -1, refuse to run and give the warning messagebox
-        for i in range(7):
+        self.best_result = tk.StringVar()
+        for i in range(9):
             if i == 0 :
                 # init the label
                 self.current_algorithm     = tk.Label(self.frm_l, textvariable = \
                 self.current_algorithm_msg, bg = 'yellow', font = ('Arial', 12), \
-                width =24   , height = 3)
+                width = 24, height = 3)
                 self.current_algorithm.grid(row = i, column = 0)
             elif i == 1:
                 # init the button `init the map`
@@ -64,7 +77,7 @@ class Myframe:
             elif i == 3:
                 # init the button `run`
                 self.run_button = tk.Button(self.frm_l, text = 'Search', \
-                                     width = 24, height = 3, command = self.init_map)
+                                     width = 24, height = 3, command = self.run)
                 self.run_button.grid(row = i, column = 0)
             elif i == 4:
                 # init the button `export result`
@@ -72,10 +85,30 @@ class Myframe:
                                      width = 24, height = 3, command = self.init_map)
                 self.export_button.grid(row = i, column = 0)  
             elif i == 5:
-                pass
+                # init the best result label
+                self.search_label = tk.Label(self.frm_l, height = 1, width = 24, \
+                        text = 'Best result', bg = 'yellow', font = ('Arial', 12))
+                self.search_label.grid(row = i, column = 0)
             elif i == 6:
+                # init the best result `text`
+                self.best_text = tk.Text(self.frm_l, height = 2, width = 24)
+                self.best_text.grid(row = i, column = 0)
+            elif i == 7:
+                # add the label for the search text
+                self.search_label = tk.Label(self.frm_l, height = 1, width = 24, \
+                        text = 'Seach result', bg = 'yellow', font = ('Arial', 12))
+                self.search_label.grid(row = i, column = 0)
+            elif i == 8:
                 # init the text widget for result
-                pass
+                self.search_text = tk.Text(self.frm_l, height = 24, width = 24)
+                self.search_text.grid(row = i, column = 0)
+
+        # the default solver is the GA solver, load three solver as function into the 
+        # TSP.solver
+        self.solver = GA.main
+        
+        # the map instance, renew by init_map function
+        self.cities_map = None
         
     def start(self):
         # start the main loop of the window
@@ -83,6 +116,10 @@ class Myframe:
         
     def init_map(self):
         # Init the map for the solver (GA, PSO, Hopfield)
+        # this function try to open the filedialog for user ti choose the tsplib file
+        fpath = filedialog.askopenfilename()    # get the name of the tsplib
+        # use the file to create the map
+        print(fpath)
         pass
 
     def check_iterations(self):
@@ -90,37 +127,51 @@ class Myframe:
         # OK - True
         # NO - False
         if self.iterations_msg.get() == 0 :
-            messagebox.error(title = 'Fatal Error', message = 'Iterations is ' + str(0) + \
-                    ', refuse to execute, please reset the iterations !')
+            messagebox.showerror(title = 'Fatal Error', message = 'Iterations is ' \
+                    + str(0) + ', refuse to execute, please reset the iterations !')
             return False
         elif self.iterations_msg.get() < 100 :
-            return messagebox.showyesno(title = 'Warning', message = 'Iterations is small, suggest to reset, do you really want to execute ?')
+            return messagebox.askyesno(title = 'Warning', message = 'Iterations is small, suggest to reset, do you really want to execute ?')
         else:
             return True
-
 
     def set_GA(self):
         # ---- Init ---- #
         # 1. change the self.current_algorithm_msg
         self.current_algorithm_msg.set('GA')
+        # 2. change the solver
+        self.solver = GA.main
         pass
 
     def set_PSO(self):
         # ---- Init ---- #
         # 1. change the self.current_algorithm_msg
         self.current_algorithm_msg.set('PSO')
+        self.solver = PSO.run
         pass
 
     def set_Hopfield(self):
         # ---- Init ---- #
         # 1. change the self.current_algorithm_msg
         self.current_algorithm_msg.set('Hopfield')
+        self.solver = Hopfield.TSPThread().run
         pass
 
     def set_iterations(self, value):
         # set iterations, just set
         self.iterations_msg.set(value)
 
+    def insert_best_result(self):
+        # insert the best result into the self.best_text
+        pass
+
+    def run(self):
+        # execute the algorithm
+        if self.check_iterations() == False:
+            return
+        # execute normally
+        pass
+
 if __name__ == "__main__":
-    app = Myframe()
+    app = TSP()
     app.start()
