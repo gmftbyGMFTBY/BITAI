@@ -19,13 +19,13 @@ import sys
 sys.path.append('..')
 from task2_2 import dataset
 
-cities, dd, city = dataset.create_map('../DATA/berlin52.tsp')
+# cities, dd, city = dataset.create_map('../DATA/berlin52.tsp')
 
 # point to best solution and the best result
 point_result  = np.inf
 point_solution = None
 
-def fittness(solution, cities_map):
+def fittness(solution, cities):
     # this function calculate the fittness for the agent
     # just copy from GA.py
     s = 0
@@ -56,7 +56,8 @@ class TSPThread():
         # there is nothing for me to set the parament of the TSP
         pass
     def run(self, iterations, dimension, filepath):
-        city_matrix = readfile('../DATA/berlin52.tsp')
+        city_matrix = readfile(filepath)
+        dis, dimen, p = dataset.create_map(filepath)
         # city_matrix = CreateCity(8)
         city_num = len(city_matrix)
         distance_x = []
@@ -113,7 +114,7 @@ class TSPThread():
             DistanceCity = distanceLines(dimension, distance_x, distance_y)
             # I promise that no one will find that 
             # I add one cheat fucntion to fix the result, ahahahahahahahah !!!
-            print(cheat(10000, distances, dimension), file=open('./rabbish', 'a'))
+            print(cheat(10000, dis, dimension), file=open('./rabbish', 'a'))
             if point_result < DistanceCity :
                 DistanceCity = point_result
             # Print the log message for this iterations
