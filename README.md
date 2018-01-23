@@ -1,10 +1,6 @@
 ## Artifical Intelligence
 
----
-
-[TOC]
-
----
+![py](https://img.shields.io/badge/python-3.6.1-red.svg?style=plastic)  ![plat](https://img.shields.io/badge/platform-Ubuntu16.04-red.svg?style=plastic)
 
 ### Before the Report
 
