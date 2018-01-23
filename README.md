@@ -43,19 +43,9 @@
 
 ### 1. Application for Machine Learning
 
----
 
-#### 1.1 Reinforcement Learning
 
->该实验(针对  微信跳一跳 的强化学习外挂)虽然不是大作业的具体要求，但是我个人对这个非常的感兴趣，所以我想申请将这个当做我的附加题
-
-* 问题
-  1. 微信跳一跳外挂软件
-  2. 针对游戏的强化学习框架
-* 目标 : 学习构建针对游戏`微信跳一跳`的强化学习系统
-* 算法 : `Q-Leaning / TD-Learning`
-
-#### 1.2 Supervise Learning
+#### 1.1 Supervise Learning
 
 * 问题
 
@@ -76,7 +66,7 @@
 
 ---
 
-#### 1.3 Unsupervise Learning
+#### 1.2 Unsupervise Learning
 
 * 问题
 
