@@ -40,4 +40,4 @@ def create_map(filename):
     return cities_map, dimension, cities
 
 if __name__ == "__main__":
-    pass
+    print(create_map('../DATA/berlin52.tsp'))

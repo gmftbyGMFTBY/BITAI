@@ -91,6 +91,7 @@ class agent:
         s = 0
         for i in range(self.dimension - 1):
             s += cities_map[self.solution[i] - 1, self.solution[i + 1] - 1]
+        s += cities_map[self.solution[-1] - 1, self.solution[0] - 1]
         return s
 
     def find_pbest(self, cities_map):

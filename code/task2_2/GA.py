@@ -57,6 +57,7 @@ def fittness(agent, cities_map):
     s = 0
     for i in range(agent.dimension - 1):
         s += cities_map[agent.solution[i] - 1, agent.solution[i + 1] - 1]
+    s += cities_map[agent.solution[-1] - 1, agent.solution[0] - 1]
     return s
 
 class agent:
