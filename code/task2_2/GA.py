@@ -50,7 +50,7 @@ from operator import attrgetter, itemgetter
 
 # The point to the best agent in the history
 point_solution = None
-point_fittness = None
+point_fittness = np.inf
 
 def fittness(agent, cities_map):
     # this function calculate the fittness for the agent
@@ -107,7 +107,7 @@ def init_swarm(size, dimension, cities_map, max_living):
         swarm.append(agent(dimension, cities_map, max_living))
     return swarm
 
-def generate(agent_1, agent_2, alpha, beta, mutation_number):
+def generate(agent_1, agent_2, alpha, beta, mutation_number, I):
     # This function use two father to generate the new agent 
     
     # ---- Combination alpha % ---- #
@@ -137,11 +137,17 @@ def generate(agent_1, agent_2, alpha, beta, mutation_number):
     if random.random() < beta : 
         # Possibility to mutation, one time to swap one tuple of times
         # mutation number control the number of the swap operators
+
+        if I > 0.8 * 2000 : 
+            god = 1.3
+        else:
+            god = 1
+
         for i in range(mutation_number):
-            if random.random() < 1 / (i + 1):
+            if random.random() < 1 / (i + 1) * god:
                 x1, y1 = random.sample(range(0, agent_1.dimension), 2)
                 x2, y2 = random.sample(range(0, agent_1.dimension), 2)
-                
+
                 pause_sol_1[x1], pause_sol_1[y1] = pause_sol_1[y1], pause_sol_1[x1]
                 pause_sol_2[x2], pause_sol_2[y2] = pause_sol_2[y2], pause_sol_2[x2]
     
@@ -184,13 +190,13 @@ def select_parent(swarm, size, ii):
             index = index % len(swarm)
     return result
 
-def select_children(father, size, swarm, s_size, alpha, beta, cities_map, max_living, mutation_number):
+def select_children(father, size, swarm, s_size, alpha, beta, cities_map, max_living, mutation_number, I):
     # choose 2 * `size` children and combine with the swarm, choose `s_size` survivor
     # Create children
     children = []
     for i in range(size):
         f1, f2 = random.sample(father, 2)
-        embryo1, embryo2 = generate(f1, f2, alpha, beta, mutation_number)
+        embryo1, embryo2 = generate(f1, f2, alpha, beta, mutation_number, I)
         
         child1 = agent(f1.dimension, cities_map, max_living, embryo1)
         child2 = agent(f2.dimension, cities_map, max_living, embryo2)
@@ -211,21 +217,24 @@ def die(swarm):
     return survivor
 
 def main(size, dimension, cities_map, loop_time, parent_size, children_size, alpha, beta, max_living, mutation_number):
+    global point_solution
+    global point_fittness
     swarm = init_swarm(size, dimension, cities_map, max_living)
     for i in range(loop_time):
         father = select_parent(swarm, parent_size, i)
         # print('%d is selecting parent ... ' % i)
-        swarm  = select_children(father, children_size, swarm, size, alpha, beta, cities_map, max_living, mutation_number)
+        swarm  = select_children(father, children_size, swarm, size, alpha, beta, cities_map, max_living, mutation_number, i)
         # print('%d is selecting children ... ' % i)
 
         swarm  = sorted(swarm, key = attrgetter('fittness'))    # some agents must die
-        point_solution = swarm[0].solution    # point save the best agent in the history
-        point_fittness = swarm[0].fittness
+        if swarm[0].fittness < point_fittness:
+            point_solution = swarm[0].solution    # point save the best agent in the history
+            point_fittness = swarm[0].fittness
         # print("%d is finding the best agent ... %f" % (i, point_fittness))
-        yield i, point_fittness, point_solution
+            yield i, point_fittness, point_solution
 
 if __name__ == "__main__":
-    cities_map, dimension, city = dataset.create_map('../DATA/cha34.tsp')
+    cities_map, dimension, city = dataset.create_map('../DATA/berlin52.tsp')
     # ---- test for fittness ---- #
     # print(fittness(agent(dimension, cities_map, 5), cities_map))
     # ---- test for check ---- #
@@ -243,6 +252,30 @@ if __name__ == "__main__":
     # print(len(select_children(father, 200, swarm, 300, 0.9, 0.1, cities_map, 5)))
     
     # 145.8 for cha34 question 
-    t = main(100, dimension, cities_map, 1000, 20, 100, 0.9, 1, 5, 10)
+
+    t = main(100, dimension, cities_map, 2000, 20, 100, 1, 1, 5, 10)
+
+    import matplotlib.pyplot as plt
+    import time
+    w = 0
+    p = 0
+
+    log = []
+
     for i, j ,k in t:
-        print(i, j, k)
+        # show the photo
+        print(i, round(j, 2), k)
+        log.append((i, j))
+        
+        w += 1
+        if w % 5 == 0 :
+            print("plot ... ")
+            for h in range(-1, len(k) - 1):
+                plt.plot([city[k[h] - 1][1], city[k[h + 1] - 1][1]], [city[k[h] - 1][2], city[k[h + 1] - 1][2]])
+            plt.title('Length: %f' % round(j, 2))
+            plt.savefig('/home/lantian/Videos/image%02d.png' % p)
+            plt.close()
+            p += 1
+    with open('./log', 'w') as f:
+        for i in log:
+            f.write(str(i[0]) + ' ' + str(i[1]) + '\n')

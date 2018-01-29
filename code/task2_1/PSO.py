@@ -247,11 +247,12 @@ if __name__ == "__main__":
     # test for debuging , easy test
     
     min_ab     = -1
+    ab         = 0.6
     min_result = np.inf
     cities_map, dimension = create_map('../DATA/berlin52.tsp')
     result = run(cities_map, dimension, 1000, 200, 10, ab)
-    for i in result:
-        print(i)
+    for i, j, k in result:
+        print(i, j, k)
     
     # 1000, 200, 10, 0.42, 10 times solve the avg
     '''
