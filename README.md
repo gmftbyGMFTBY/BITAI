@@ -64,6 +64,8 @@
 
   详见`report`目录下的`垃圾邮件分类`实验报告内容
 
+  [垃圾邮件识别实验报告](./report/垃圾邮件分类.md)
+
 ---
 
 #### 1.2 Unsupervise Learning
@@ -97,35 +99,39 @@
 
   实验报告详见`report`目录下的`中文文本分类`实验内容
 
+  [中文文本分类报告](./report/中文文本分类.md)
+
 ---
 
 ### 2. AI in TSP
+
+使用了 `Python` 的可视化技术，利用标准库 `tkinter` 为3个算法编写了可视化界面，效果图如下
+
+![](./photo/out4.gif) 
 
 ---
 
 #### 2.1 Hopfield
 
+报告链接
+
+[Hopfield报告](./report/Hopfield.md)
+
 ---
 
 #### 2.2 Evolution computing
+
+[GA报告](./report/GA.md)
 
 ---
 
 #### 2.3 Swarm intelligence
 
+[PSO报告](./report/PSO.md)
+
 ---
 
 #### 2.4 Thinking in Exploration and Exploitation
-
----
-
-### 3. Comprehension for AlphaGO
-
----
-
-### 4. Impression for the Class AI
-
-
 
 
 

@@ -138,17 +138,17 @@ def generate(agent_1, agent_2, alpha, beta, mutation_number, I):
         # Possibility to mutation, one time to swap one tuple of times
         # mutation number control the number of the swap operators
 
-        if I > 0.8 * 2000 : 
-            god = 1.3
-        else:
-            god = 1
-
         for i in range(mutation_number):
-            if random.random() < 1 / (i + 1) * god:
+            if random.random() < 1 / (i + 1):
                 x1, y1 = random.sample(range(0, agent_1.dimension), 2)
                 x2, y2 = random.sample(range(0, agent_1.dimension), 2)
 
                 pause_sol_1[x1], pause_sol_1[y1] = pause_sol_1[y1], pause_sol_1[x1]
+
+            if random.random() < 1 / (i + 1):
+                x1, y1 = random.sample(range(0, agent_1.dimension), 2)
+                x2, y2 = random.sample(range(0, agent_1.dimension), 2)
+
                 pause_sol_2[x2], pause_sol_2[y2] = pause_sol_2[y2], pause_sol_2[x2]
     
     # return two children 
@@ -193,6 +193,7 @@ def select_parent(swarm, size, ii):
 def select_children(father, size, swarm, s_size, alpha, beta, cities_map, max_living, mutation_number, I):
     # choose 2 * `size` children and combine with the swarm, choose `s_size` survivor
     # Create children
+
     children = []
     for i in range(size):
         f1, f2 = random.sample(father, 2)
@@ -253,7 +254,8 @@ if __name__ == "__main__":
     
     # 145.8 for cha34 question 
 
-    t = main(100, dimension, cities_map, 2000, 20, 100, 1, 1, 5, 10)
+    # t = main(100, dimension, cities_map, 10000, 20, 70, 1, 1, 5, 10)
+    t = main(100, dimension, cities_map, 500, 20, 10, 1, 1, 5, 10)
 
     import matplotlib.pyplot as plt
     import time

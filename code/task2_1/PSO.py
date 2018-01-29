@@ -249,7 +249,7 @@ if __name__ == "__main__":
     min_ab     = -1
     ab         = 0.6
     min_result = np.inf
-    cities_map, dimension = create_map('../DATA/berlin52.tsp')
+    cities_map, dimension = create_map('../DATA/cha34.tsp')
     result = run(cities_map, dimension, 1000, 200, 10, ab)
     for i, j, k in result:
         print(i, j, k)

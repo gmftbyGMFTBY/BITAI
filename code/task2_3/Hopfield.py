@@ -126,9 +126,10 @@ if __name__ == '__main__':
     # create the instance for the TSP Problem
     Instance = TSPThread()
     # set the number of the iterations
+    city_num = 52
     handle = Instance.run(100, city_num, '../DATA/berlin52.tsp')
     for i, j, k in handle:
-        print(i, j, k)
+        print(i, round(j, 2), k)
     
     
     
@@ -230,7 +231,9 @@ if __name__ == '__main__':
     
     
     # Carefully destroy the log, ahahahahahahaha , I am the king of the cheat !!
+    '''
     import os
     ans = os.system('rm ./rabbish')
     if ans == 0 :
         print('destroy the evidence successfully ! :)')
+    '''
