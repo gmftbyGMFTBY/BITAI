@@ -58,13 +58,13 @@
 
 * 流程 : 
 
-  ![实验1_1-thumb](/home/lantian/File/AI/photo/实验1_1-thumb.png)
+  ![实验1_1-thumb](https://github.com/gmftbyGMFTBY/BITAI/blob/master/photo/实验1_1-thumb.png)
 
 * 实验报告
 
   详见`report`目录下的`垃圾邮件分类`实验报告内容
 
-  [垃圾邮件识别实验报告](./report/垃圾邮件分类.md)
+  [垃圾邮件识别实验报告](https://github.com/gmftbyGMFTBY/BITAI/blob/master/report/垃圾邮件分类.md)
 
 ---
 
@@ -86,7 +86,7 @@
 
 * 流程
 
-  ![文本聚类](/home/lantian/File/AI/photo/文本聚类.png)
+  ![文本聚类](https://github.com/gmftbyGMFTBY/BITAI/blob/master/photo/文本聚类.png)
 
 * 具体开发环境
 
@@ -99,7 +99,7 @@
 
   实验报告详见`report`目录下的`中文文本分类`实验内容
 
-  [中文文本分类报告](./report/中文文本分类.md)
+  [中文文本分类报告](https://github.com/gmftbyGMFTBY/BITAI/blob/master/report/中文文本分类.md)
 
 ---
 
@@ -107,7 +107,7 @@
 
 使用了 `Python` 的可视化技术，利用标准库 `tkinter` 为3个算法编写了可视化界面，效果图如下
 
-![](./photo/out4.gif) 
+![](https://github.com/gmftbyGMFTBY/BITAI/blob/master/photo/out4.gif) 
 
 ---
 
