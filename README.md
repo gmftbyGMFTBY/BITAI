@@ -133,5 +133,4 @@
 
 #### 2.4 Thinking in Exploration and Exploitation
 
-
-
+[报告](./report/搜索问题.md)
